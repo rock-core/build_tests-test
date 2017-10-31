@@ -22,8 +22,14 @@ describe "m-type generation" do
     end
 
     it "sets up the m-type include and path properly" do
-        assert_equal ["m_type_generation:m_type_generation/m_types/m_type_generation_Containing.hpp"],
+        assert_equal ["m_type_generation:m_type_generation/typekit/m_types/m_type_generation_Containing.hpp"],
             @m_type.metadata.get('orogen_include')
+    end
+
+    it "installs the m-type headers properly" do
+        pkg_name, path = @m_type.metadata.get('orogen_include').first.split(':')
+        pkg = @loader.resolve_typekit_package(pkg_name)
+        assert pkg.include_dirs.any? { |p| File.exist?(File.join(p, path)) }
     end
 end
 
